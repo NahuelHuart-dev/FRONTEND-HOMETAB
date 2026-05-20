@@ -1,0 +1,545 @@
+/**
+ * ============================================================
+ * HOMETAB  REUSABLE COMPONENTS CSS
+ * components.css
+ *
+ * Clases de componentes y utilidades reutilizables.
+ * REGLA: Si un bloque de CSS aparece en más de un archivo
+ *        .vue, pertenece aquí. Los archivos .vue solo
+ *        deben tener estilos 100% específicos de ese
+ *        componente (layout propio, variaciones únicas).
+ *
+ * ORGANIZACION:
+ *   1. Layout / Contenedores
+ *   2. Botones (ht-btn-*)
+ *   3. Inputs / Formularios (ht-input)
+ *   4. Tarjetas de papel / Post-it
+ *   5. Elementos decorativos (tape, resaltado, badge)
+ *   6. Sección de información (info-block)
+ *   7. Utilidades helpers
+ *   8. PrimeVue overrides globales
+ *   9. Responsive helpers
+ * ============================================================
+ */
+
+/*
+   1. LAYOUT / CONTENEDORES
+    */
+
+/**
+ * Contenedor de página estándar.
+ * Uso: <div class="ht-container">
+ */
+.ht-container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-8);
+  padding-right: var(--space-8);
+}
+
+@media (max-width: 768px) {
+  .ht-container { padding-left: var(--space-4); padding-right: var(--space-4); }
+}
+
+/**
+ * Sección de página con padding vertical estándar.
+ * Uso: <section class="ht-section">
+ */
+.ht-section {
+  padding-top: var(--space-20);
+  padding-bottom: var(--space-20);
+}
+
+/**
+ * Centrado flex rápido.
+ */
+.ht-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*
+   2. BOTONES (ht-btn-*)
+   Los colores de acento vienen de variables CSS.
+    */
+
+/**
+ * Base compartida por todos los botones.
+ */
+.ht-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: var(--text-base);
+  padding: 0.65em 1.4em;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    transform var(--duration-fast) var(--ease-bounce),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+  min-height: 44px; /* touch target mínimo */
+  white-space: nowrap;
+}
+
+.ht-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.ht-btn:active {
+  transform: scale(0.97) translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.ht-btn:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/** Botón primario (relleno con color acento) */
+.ht-btn-primary {
+  background-color: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+}
+
+.ht-btn-primary:hover {
+  background-color: var(--color-accent);
+  filter: brightness(1.1);
+}
+
+/** Botón secundario (fondo semitransparente) */
+.ht-btn-secondary {
+  background-color: var(--accent-bg-btn);
+  color: var(--color-text);
+  border-color: var(--color-accent);
+}
+
+.ht-btn-secondary:hover {
+  background-color: var(--accent-bg-medium);
+}
+
+/** Botón fantasma (solo borde) */
+.ht-btn-ghost {
+  background-color: transparent;
+  color: var(--color-text-muted);
+  border-color: var(--color-border-strong);
+}
+
+.ht-btn-ghost:hover {
+  background-color: var(--color-input-bg);
+  color: var(--color-text);
+}
+
+/** Botón de peligro (eliminar, logout) */
+.ht-btn-danger {
+  background-color: transparent;
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.ht-btn-danger:hover {
+  background-color: #ef444420;
+}
+
+/*
+   3. INPUTS / FORMULARIOS
+    */
+
+/**
+ * Input estándar de HomeTab.
+ * Funciona con PrimeVue InputText y con <input> nativos.
+ * Uso: class="ht-input" en InputText de PrimeVue.
+ */
+.ht-input,
+:deep(.ht-input) {
+  display: block !important;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-ui) !important;
+  font-size: var(--text-base) !important;
+  background: var(--color-input-bg) !important;
+  background-color: var(--color-input-bg) !important;
+  color: var(--color-text) !important;
+  border: 2px solid var(--color-border-strong) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.65em 1em !important;
+  min-height: 44px;
+  line-height: 1.3;
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard) !important;
+}
+
+.ht-input:hover,
+:deep(.ht-input:hover) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.ht-input:focus,
+:deep(.ht-input:focus) {
+  outline: none !important;
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 4px var(--accent-border) !important;
+  transform: translateY(-2px) !important;
+}
+
+.ht-input:-webkit-autofill,
+.ht-input:-webkit-autofill:hover,
+.ht-input:-webkit-autofill:focus,
+.p-inputtext:-webkit-autofill,
+.p-inputtext:-webkit-autofill:hover,
+.p-inputtext:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-text) !important;
+  caret-color: var(--color-text) !important;
+  box-shadow: 0 0 0 1000px var(--color-input-bg) inset !important;
+  border-color: var(--color-accent) !important;
+  transition: background-color 9999s ease-out 0s !important;
+}
+
+/** Wrapper del password PrimeVue */
+.ht-pass-wrapper,
+.ht-pass-wrapper.p-password,
+:deep(.ht-pass-wrapper) {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.ht-pass-wrapper .p-password-input,
+.ht-pass-wrapper input,
+:deep(.ht-pass-wrapper input) {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: var(--color-input-bg) !important;
+  background-color: var(--color-input-bg) !important;
+  color: var(--color-text) !important;
+  border: 2px solid var(--color-border-strong) !important;
+  border-radius: var(--radius-md) !important;
+  min-height: 44px;
+  padding: 0.65em 2.75em 0.65em 1em !important;
+  font-family: var(--font-ui) !important;
+  font-size: var(--text-base) !important;
+  line-height: 1.3;
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard) !important;
+}
+
+.ht-pass-wrapper .p-password-input:hover,
+.ht-pass-wrapper input:hover,
+:deep(.ht-pass-wrapper input:hover) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.ht-pass-wrapper .p-password-input:focus,
+.ht-pass-wrapper input:focus,
+:deep(.ht-pass-wrapper input:focus) {
+  outline: none !important;
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 4px var(--accent-border) !important;
+  transform: translateY(-2px) !important;
+}
+
+.ht-pass-wrapper .p-password-toggle-mask-icon,
+.ht-pass-wrapper .p-icon,
+.ht-pass-wrapper svg {
+  color: var(--color-text-muted) !important;
+}
+
+.ht-pass-wrapper input:-webkit-autofill,
+.ht-pass-wrapper input:-webkit-autofill:hover,
+.ht-pass-wrapper input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-text) !important;
+  caret-color: var(--color-text) !important;
+  box-shadow: 0 0 0 1000px var(--color-input-bg) inset !important;
+  border-color: var(--color-accent) !important;
+  transition: background-color 9999s ease-out 0s !important;
+}
+
+/*
+   4. TARJETAS TIPO PAPER/POST-IT
+    */
+
+/**
+ * Tarjeta de papel estilo post-it.
+ * Compartida por LoginView, RegisterView (formularios).
+ */
+.ht-paper-card {
+  position: relative;
+  background-color: var(--color-card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-12) var(--space-8) var(--space-8) var(--space-8);
+  width: 100%;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  transition: transform var(--duration-slow) var(--ease-bounce),
+              box-shadow var(--duration-slow) var(--ease-standard);
+}
+
+.ht-paper-card:hover {
+  transform: rotate(0deg) translateY(-5px) !important;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Cinta de celo decorativa (tape) */
+.ht-paper-tape,
+.paper-tape,
+.tape {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 120px;
+  height: 32px;
+  background-color: var(--color-tape-bg);
+  border-left: 1px dashed rgba(0, 0, 0, 0.1);
+  border-right: 1px dashed rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  opacity: 0.7;
+  z-index: 2;
+}
+
+/*
+   5. BADGES / MINI TAGS / HERO BADGE
+    */
+
+/**
+ * Badge del hero (ej: "Gestión de hogar sin dramas")
+ */
+.ht-hero-badge,
+.hero-badge {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin-bottom: var(--space-6);
+  border: 2px dashed var(--color-accent);
+  color: var(--color-accent);
+}
+
+/*
+   6. INFO BLOCKS (secciones de features)
+   Compartido por LandingView y AboutView
+    */
+
+.ht-info-block,
+.info-block {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  width: 100%;
+}
+
+.ht-info-block.reverse,
+.info-block.reverse {
+  flex-direction: row-reverse;
+}
+
+.ht-info-text,
+.info-text {
+  flex: 1;
+}
+
+.ht-info-text h2,
+.info-text h2 {
+  margin-bottom: var(--space-4);
+}
+
+.ht-info-text p,
+.info-text p {
+  font-size: var(--text-lg);
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+
+.ht-visual-wrapper,
+.visual-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .ht-info-block,
+  .info-block {
+    flex-direction: column !important;
+    text-align: center;
+    gap: var(--space-8);
+  }
+}
+
+/*
+   7. UTILIDADES HELPERS
+   (sustituyen las clases inline repetidas en views)
+    */
+
+.ht-w-full  { width: 100%; }
+.ht-mb-1    { margin-bottom: var(--space-1); }
+.ht-mb-2    { margin-bottom: var(--space-2); }
+.ht-mb-3    { margin-bottom: var(--space-4); }
+.ht-mb-4    { margin-bottom: var(--space-6); }
+.ht-mt-auto { margin-top: auto; }
+.ht-block   { display: block; }
+.ht-text-left  { text-align: left; }
+.ht-text-center { text-align: center; }
+.ht-opacity-70 { opacity: 0.7; }
+.ht-opacity-80 { opacity: 0.8; }
+.ht-ht-font-bold  { font-weight: 700; }
+
+/*
+   8. PRIMEVUE OVERRIDES GLOBALES
+    */
+
+/** Dialog mask (fondo oscuro) */
+.p-dialog-mask {
+  background-color: var(--color-overlay) !important;
+  backdrop-filter: blur(5px);
+}
+
+.p-dialog {
+  background: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-xl) !important;
+  overflow: hidden;
+}
+
+.p-dialog .p-dialog-header,
+.p-dialog .p-dialog-content,
+.p-dialog .p-dialog-footer {
+  background: var(--color-surface) !important;
+  color: var(--color-text) !important;
+}
+
+.p-dialog .p-dialog-header {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-5) var(--space-6);
+}
+
+.p-dialog .p-dialog-title {
+  color: var(--color-text) !important;
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.p-dialog .p-dialog-content {
+  padding: var(--space-5) var(--space-6) var(--space-6);
+}
+
+.p-dialog .p-dialog-header-icon {
+  color: var(--color-text-muted) !important;
+  border-radius: var(--radius-md);
+}
+
+.p-dialog .p-dialog-header-icon:hover {
+  background: var(--color-input-bg) !important;
+  color: var(--color-text) !important;
+}
+
+/** Cursores para elementos interactivos */
+a, button,
+.cursor-pointer,
+.config-trigger,
+input[type="color"],
+i[class^="pi"] {
+  cursor: var(--mi-cursor-pointer, pointer) !important;
+}
+
+.p-button,
+.p-inputtext,
+.p-password-input {
+  cursor: var(--mi-cursor-pointer, pointer) !important;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined):not(.p-button-danger),
+.p-button-primary {
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: white !important;
+}
+
+.p-button.p-button-outlined,
+.p-button-outlined {
+  background: transparent !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+.p-button.p-button-text,
+.p-button-text {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--color-text-muted) !important;
+}
+
+.p-button.p-button-text:hover,
+.p-button-text:hover {
+  background: var(--accent-bg-subtle) !important;
+  color: var(--color-accent) !important;
+}
+
+.p-checkbox-box.p-highlight,
+.p-radiobutton-box.p-highlight,
+.p-togglebutton-checked,
+.p-select-option.p-select-option-selected,
+.p-dropdown-item.p-highlight {
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: white !important;
+}
+
+.p-focus,
+.p-inputtext:enabled:focus,
+.p-password-input:enabled:focus,
+.p-select:not(.p-disabled).p-focus,
+.p-dropdown:not(.p-disabled).p-focus {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 4px var(--accent-border) !important;
+}
+
+/*
+   9. ESTADO DE CARGA COMPARTIDO
+    */
+
+/**
+ * Estado de carga centrado.
+ * Uso: <div class="ht-loading-state">
+ */
+.ht-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 30vh;
+  gap: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.ht-loading-state i {
+  color: var(--color-accent);
+  font-size: var(--icon-xl);
+}

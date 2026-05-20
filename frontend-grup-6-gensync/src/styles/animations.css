@@ -1,0 +1,243 @@
+/**
+ * ============================================================
+ * HOMETAB — ANIMATIONS SYSTEM
+ * animations.css
+ *
+ * Define todos los @keyframes globales y las clases de
+ * utilidad de animación. Complementa las animaciones
+ * de GSAP (que viven en useAnimations.js) para los
+ * casos de CSS puro (hovers, estados, transiciones simples).
+ *
+ * POLÍTICA:
+ *   - CSS → hovers, focus, transitions de componentes simples,
+ *           entrada de elementos con una sola animación.
+ *   - GSAP → timelines, scroll triggers, stagger, countUp.
+ *
+ * ACCESIBILIDAD: Todo el bloque está envuelto en
+ * prefers-reduced-motion: no-preference para que usuarios
+ * con configuración de movimiento reducido no vean nada.
+ * ============================================================
+ */
+
+/* ──────────────────────────────────────────────
+   1. KEYFRAMES GLOBALES
+   ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /**
+   * ht-fade-in
+   * Aparición suave con ligero movimiento desde abajo.
+   * Uso: .ht-fade-in en el elemento raíz de una view.
+   */
+  @keyframes ht-fade-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /**
+   * ht-slide-up
+   * Entrada más pronunciada desde abajo.
+   */
+  @keyframes ht-slide-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /**
+   * ht-pop-in
+   * Entrada rebotona (para modales y tarjetas login/register).
+   */
+  @keyframes ht-pop-in {
+    0%   { opacity: 0; transform: scale(0.85) rotate(var(--start-rotation, 0deg)); }
+    70%  { opacity: 1; transform: scale(1.03) rotate(0deg); }
+    100% { opacity: 1; transform: scale(1) rotate(var(--end-rotation, 0deg)); }
+  }
+
+  /**
+   * ht-pulse
+   * Pulsación suave para loaders y elementos de espera.
+   */
+  @keyframes ht-pulse {
+    0%   { transform: scale(1);    opacity: 0.8; }
+    50%  { transform: scale(1.1);  opacity: 1; }
+    100% { transform: scale(1);    opacity: 0.8; }
+  }
+
+  /**
+   * ht-shake
+   * Sacudida horizontal para errores de validación.
+   */
+  @keyframes ht-shake {
+    0%,100% { transform: translateX(0) rotate(var(--base-rotation, 0deg)); }
+    20%      { transform: translateX(-8px) rotate(var(--base-rotation, 0deg)); }
+    40%      { transform: translateX(8px) rotate(var(--base-rotation, 0deg)); }
+    60%      { transform: translateX(-5px) rotate(var(--base-rotation, 0deg)); }
+    80%      { transform: translateX(5px) rotate(var(--base-rotation, 0deg)); }
+  }
+
+  /**
+   * ht-bounce-in
+   * Los elementos "caen" desde arriba con rebote.
+   */
+  @keyframes ht-bounce-in {
+    0%   { opacity: 0; transform: translateY(-30px) scale(0.95); }
+    60%  { opacity: 1; transform: translateY(6px) scale(1.02); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /**
+   * ht-slide-right
+   * Entrada desde la izquierda (para bloques de contenido).
+   */
+  @keyframes ht-slide-right {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /**
+   * ht-slide-left
+   * Entrada desde la derecha.
+   */
+  @keyframes ht-slide-left {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /**
+   * ht-ripple
+   * Expansión de onda para efecto ripple en botones.
+   */
+  @keyframes ht-ripple {
+    0%   { transform: scale(0); opacity: 0.6; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+
+  /* ──────────────────────────────────────────────
+     2. CLASES DE ANIMACIÓN DE UTILIDAD
+     ────────────────────────────────────────────── */
+
+  /** Fade in con movimiento sutil desde abajo */
+  .ht-fade-in {
+    animation: ht-fade-in 0.45s var(--ease-standard) both;
+  }
+
+  /** Versión con delay para stagger manual */
+  .ht-fade-in-1 { animation: ht-fade-in 0.45s 0.1s var(--ease-standard) both; }
+  .ht-fade-in-2 { animation: ht-fade-in 0.45s 0.2s var(--ease-standard) both; }
+  .ht-fade-in-3 { animation: ht-fade-in 0.45s 0.3s var(--ease-standard) both; }
+  .ht-fade-in-4 { animation: ht-fade-in 0.45s 0.4s var(--ease-standard) both; }
+
+  /** Pop in (tarjetas login/register) */
+  .ht-pop-in {
+    animation: ht-pop-in 0.5s var(--ease-bounce) both;
+  }
+
+  /** Shake en error */
+  .ht-shake {
+    animation: ht-shake 0.45s var(--ease-standard) both;
+  }
+
+  /** Bounce in */
+  .ht-bounce-in {
+    animation: ht-bounce-in 0.55s var(--ease-bounce) both;
+  }
+
+  /** Loader pulse (palpito) */
+  .ht-pulse {
+    animation: ht-pulse 1.5s infinite ease-in-out;
+  }
+
+} /* end prefers-reduced-motion */
+
+/* ──────────────────────────────────────────────
+   3. TRANSICIONES GLOBALES DE COMPONENTES
+   Estas no son animaciones de keyframe sino
+   transitions CSS que aplican a elementos UI comunes.
+   No requieren prefers-reduced-motion porque son
+   instantáneas o muy sutiles.
+   ────────────────────────────────────────────── */
+
+/** Transición base del tema (bg + color) */
+.hometab-wrapper,
+.hometab-wrapper * {
+  transition:
+    background-color var(--duration-slow) var(--ease-standard),
+    border-color var(--duration-slow) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+/**
+ * Excepción: los elementos que NO deben transicionar color
+ * (evitar parpadeos en PrimeIcons y SVGs).
+ */
+.hometab-wrapper i[class^="pi"],
+.hometab-wrapper svg {
+  transition: none;
+}
+
+/* ──────────────────────────────────────────────
+   4. TRANSICIÓN DE PÁGINA (screen-loader)
+   ────────────────────────────────────────────── */
+
+.screen-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-standard);
+}
+
+.screen-loader.activo {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loader-logo-wrapper {
+  width: 80px;
+  color: var(--color-accent);
+}
+
+.screen-loader .svg-logo,
+.screen-loader svg {
+  color: var(--color-accent) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .loader-logo-wrapper {
+    animation: ht-pulse 1.5s infinite ease-in-out;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   5. TRANSICIONES DE VUE ROUTER (v-if / v-show)
+   ────────────────────────────────────────────── */
+
+/** Fade para modales y paneles condicionales */
+.ht-fade-enter-active,
+.ht-fade-leave-active {
+  transition: opacity var(--duration-base) var(--ease-standard);
+}
+
+.ht-fade-enter-from,
+.ht-fade-leave-to {
+  opacity: 0;
+}
+
+/** Slide-up para bottom sheets / drawers */
+.ht-slide-up-enter-active,
+.ht-slide-up-leave-active {
+  transition: transform var(--duration-slow) var(--ease-in-out),
+              opacity var(--duration-slow) var(--ease-in-out);
+}
+
+.ht-slide-up-enter-from,
+.ht-slide-up-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}

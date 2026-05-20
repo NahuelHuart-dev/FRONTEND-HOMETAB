@@ -1,0 +1,206 @@
+/**
+ * ============================================================
+ * HOMETAB — DESIGN TOKENS
+ * tokens.css
+ *
+ * Variables CSS globales del sistema de diseño.
+ * Estas variables son el origen único de verdad para
+ * colores, tipografía, espaciado y radios en toda la app.
+ *
+ * Los colores de tema (--color-bg, --color-text, etc.)
+ * se definen dos veces: una para light (:root) y otra
+ * para dark ([data-theme="dark"]). El atributo data-theme
+ * lo gestiona useTheme.js en App.vue.
+ *
+ * Los colores de acento (--color-accent y derivados)
+ * son dinámicos y los inyecta useTheme.js via JS
+ * en document.documentElement.style.setProperty()
+ * ============================================================
+ */
+
+/* ──────────────────────────────────────────────
+   1. FUENTES (font stacks)
+   ────────────────────────────────────────────── */
+:root {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-ui:      'Comfortaa', 'Segoe UI', sans-serif;
+  --font-accent:  'Patrick Hand', cursive;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* ──────────────────────────────────────────────
+   2. ESCALA TIPOGRÁFICA
+   ────────────────────────────────────────────── */
+:root {
+  --text-xs:   0.75rem;    /* 12px — micro labels, copyright */
+  --text-sm:   0.875rem;   /* 14px — labels formulario, hints */
+  --text-base: 1rem;       /* 16px — cuerpo de texto */
+  --text-lg:   1.125rem;   /* 18px — subtítulos pequeños */
+  --text-xl:   1.25rem;    /* 20px — subtítulos de sección */
+  --text-2xl:  1.5rem;     /* 24px — h3 widgets y tarjetas */
+  --text-3xl:  2rem;       /* 32px — h2 de secciones */
+  --text-4xl:  2.5rem;     /* 40px — h2 hero secundario */
+  --text-5xl:  clamp(2.2rem, 5vw, 3.5rem); /* h1 principal (responsive) */
+}
+
+/* ──────────────────────────────────────────────
+   3. COLORES — LIGHT THEME (default)
+   ────────────────────────────────────────────── */
+:root {
+  /* Fondos */
+  --color-bg:          #fdfbf7;
+  --color-bg-alt:      #f5f0e8;
+  --color-surface:     #ffffff;
+
+  /* Textos */
+  --color-text:        #1c1917;
+  --color-text-muted:  #78716c;
+  --color-text-subtle: #a8a29e;
+
+  /* Bordes y líneas */
+  --color-border:        rgba(0, 0, 0, 0.08);
+  --color-border-strong: #e7e5e4;
+  --color-grid-line:     rgba(0, 0, 0, 0.07);
+
+  /* Superficies de componentes */
+  --color-input-bg:  #f5f5f4;
+  --color-card-bg:   rgba(255, 255, 255, 0.65);
+  --color-drawer-bg: #ffffff;
+  --color-tape-bg:   rgba(255, 255, 255, 0.4);
+  --color-overlay:   rgba(0, 0, 0, 0.6);
+
+  /* Dividers en el drawer */
+  --color-divider: #eeeeee;
+}
+
+/* ──────────────────────────────────────────────
+   4. COLORES — DARK THEME
+   ────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Fondos */
+  --color-bg:          #1c1917;
+  --color-bg-alt:      #292524;
+  --color-surface:     #292524;
+
+  /* Textos */
+  --color-text:        #e7e5e4;
+  --color-text-muted:  #a8a29e;
+  --color-text-subtle: #78716c;
+
+  /* Bordes y líneas */
+  --color-border:        rgba(255, 255, 255, 0.08);
+  --color-border-strong: #44403c;
+  --color-grid-line:     rgba(255, 255, 255, 0.07);
+
+  /* Superficies de componentes */
+  --color-input-bg:  #44403c;
+  --color-card-bg:   rgba(41, 37, 36, 0.65);
+  --color-drawer-bg: #1c1917;
+  --color-tape-bg:   rgba(255, 255, 255, 0.15);
+  --color-overlay:   rgba(0, 0, 0, 0.75);
+
+  /* Dividers */
+  --color-divider: #333333;
+}
+
+/* ──────────────────────────────────────────────
+   5. COLORES — SISTEMA (invariables por tema)
+   ────────────────────────────────────────────── */
+:root {
+  --color-error:    #ef4444;
+  --color-success:  var(--color-accent);
+  --color-warning:  #f59e0b;
+  --color-info:     #3b82f6;
+
+  /* Accent — valores por defecto (Arcilla).
+     useTheme.js los sobreescribe dinámicamente. */
+  --color-accent:          #ea580c;
+  --accent-bg-subtle:      #ea580c0D; /* ~5% */
+  --accent-bg:             #ea580c15; /* ~8% */
+  --accent-bg-icon:        #ea580c20; /* ~12% */
+  --accent-bg-btn:         #ea580c30; /* ~19% */
+  --accent-border:         #ea580c40; /* ~25% */
+  --accent-border-strong:  #ea580c60; /* ~38% */
+  --accent-bg-medium:      #ea580c99; /* ~60% */
+}
+
+/* ──────────────────────────────────────────────
+   6. ESPACIADO
+   ────────────────────────────────────────────── */
+:root {
+  --space-1:  0.25rem;   /*  4px */
+  --space-2:  0.5rem;    /*  8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+}
+
+/* ──────────────────────────────────────────────
+   7. RADIOS DE BORDE
+   ────────────────────────────────────────────── */
+:root {
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   20px;
+  --radius-pill: 50px;
+  --radius-full: 9999px;
+}
+
+/* ──────────────────────────────────────────────
+   8. SOMBRAS
+   ────────────────────────────────────────────── */
+:root {
+  --shadow-sm:  5px 10px 15px rgba(0, 0, 0, 0.05);
+  --shadow-md:  5px 10px 20px rgba(0, 0, 0, 0.1);
+  --shadow-lg:  10px 15px 30px rgba(0, 0, 0, 0.12);
+  --shadow-xl:  0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ──────────────────────────────────────────────
+   9. DURACIONES DE TRANSICIÓN
+   ────────────────────────────────────────────── */
+:root {
+  --duration-fast:   150ms;
+  --duration-base:   250ms;
+  --duration-slow:   400ms;
+  --duration-slower: 600ms;
+
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out:   cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ──────────────────────────────────────────────
+   10. LAYOUT — ALTURAS FIJAS
+   ────────────────────────────────────────────── */
+:root {
+  --navbar-height:     70px;
+  --bottom-nav-height: 68px; /* Altura del bottom nav en móvil */
+
+  /* Contenedores máximos */
+  --container-sm:   450px;
+  --container-md:   900px;
+  --container-lg:   1200px;
+  --container-xl:   1400px;
+  --container-full: 1600px;
+}
+
+/* ──────────────────────────────────────────────
+   11. ÍCONOS — TAMAÑOS
+   ────────────────────────────────────────────── */
+:root {
+  --icon-sm:  1rem;
+  --icon-md:  1.25rem;
+  --icon-lg:  1.5rem;
+  --icon-xl:  2rem;
+  --icon-2xl: 3rem;
+  --icon-3xl: 4rem;
+}

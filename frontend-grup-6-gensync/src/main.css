@@ -1,0 +1,105 @@
+/**
+ * ============================================================
+ * HOMETAB — MAIN CSS ENTRY POINT
+ * main.css
+ *
+ * Punto de entrada del sistema de diseño.
+ * El orden de imports importa:
+ *   1. Google Fonts (externo)
+ *   2. Tokens (variables CSS globales) — siempre primero
+ *   3. Typography (reglas de texto)
+ *   4. Animations (keyframes y clases de animación)
+ *   5. Components (clases reutilizables de componentes)
+ *
+ * No añadir estilos aquí directamente. Si pertenece a un
+ * ámbito específico, va en su archivo correspondiente.
+ * ============================================================
+ */
+
+/* ──────────────────────────────────────────────
+   1. GOOGLE FONTS
+   Cargamos las 4 familias del design system:
+   - Playfair Display  → Display / Hero titles
+   - Comfortaa         → UI / Body text
+   - Patrick Hand      → Accent / Post-its
+   - JetBrains Mono    → Monospace / Códigos
+   ────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Comfortaa:wght@300;400;600;700&family=Patrick+Hand&family=JetBrains+Mono&display=swap');
+
+/* ──────────────────────────────────────────────
+   2. DESIGN TOKENS (variables CSS globales)
+   ────────────────────────────────────────────── */
+@import './styles/tokens.css';
+
+/* ──────────────────────────────────────────────
+   3. TYPOGRAPHY SYSTEM
+   ────────────────────────────────────────────── */
+@import './styles/typography.css';
+
+/* ──────────────────────────────────────────────
+   4. ANIMATIONS & KEYFRAMES
+   ────────────────────────────────────────────── */
+@import './styles/animations.css';
+
+/* ──────────────────────────────────────────────
+   5. REUSABLE COMPONENT CLASSES
+   ────────────────────────────────────────────── */
+@import './styles/components.css';
+
+/* ──────────────────────────────────────────────
+   6. RESET & BASE
+   ────────────────────────────────────────────── */
+
+/**
+ * Box-sizing global — evita el comportamiento
+ * confuso del modelo de caja por defecto.
+ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/**
+ * Body base — aplica fuente UI, color y fondo
+ * usando las variables del sistema de temas.
+ * El atributo data-theme en <html> cambia estos valores.
+ */
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--duration-slow) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+/**
+ * Eliminamos márgenes y paddings por defecto
+ * que interfieren con nuestro sistema de espaciado.
+ */
+p, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+/**
+ * Las imágenes son responsive por defecto.
+ */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/**
+ * Focus visible global para accesibilidad.
+ * NO hacer outline: none sin reemplazo visible.
+ */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

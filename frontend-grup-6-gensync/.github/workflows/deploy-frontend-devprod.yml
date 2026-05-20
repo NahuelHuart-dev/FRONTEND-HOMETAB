@@ -1,0 +1,127 @@
+name: Deploy Frontend Hometab
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Environment to deploy"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - prod
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Build Vue app
+        run: npm run build
+        env:
+          VITE_API_URL: http://127.0.0.1:8000/api
+
+  deploy-dev:
+    needs: test
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'workflow_dispatch' && inputs.target == 'dev')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vue app for DEV
+        run: npm run build
+        env:
+          VITE_API_URL: ${{ secrets.DEV_API_URL }}
+
+      - name: Upload frontend to DEV EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEV_SERVER_HOST }}
+          username: ${{ secrets.DEV_SERVER_USER }}
+          key: ${{ secrets.DEV_SERVER_SSH_KEY }}
+          source: "dist/"
+          target: "/tmp/hometab-frontend-${{ github.run_id }}"
+          strip_components: 1
+          rm: true
+
+      - name: Publish frontend on DEV EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_SERVER_HOST }}
+          username: ${{ secrets.DEV_SERVER_USER }}
+          key: ${{ secrets.DEV_SERVER_SSH_KEY }}
+          script: |
+            set -e
+            STAGING="/tmp/hometab-frontend-${{ github.run_id }}"
+            sudo mkdir -p "${{ secrets.DEV_FRONTEND_PATH }}"
+            sudo rsync -a --delete "$STAGING"/ "${{ secrets.DEV_FRONTEND_PATH }}"/
+            sudo chown -R www-data:www-data "${{ secrets.DEV_FRONTEND_PATH }}"
+            rm -rf "$STAGING"
+
+  deploy-prod:
+    needs: test
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && inputs.target == 'prod')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        env:
+          IMAGE_URI: ${{ secrets.ECR_FRONTEND_URI }}
+          VITE_API_URL: ${{ secrets.PROD_API_URL }}
+        run: |
+          docker build --build-arg VITE_API_URL="$VITE_API_URL" -t "$IMAGE_URI:${{ github.sha }}" -t "$IMAGE_URI:latest" .
+          docker push "$IMAGE_URI:${{ github.sha }}"
+          docker push "$IMAGE_URI:latest"
+
+      - name: Redeploy ECS frontend service
+        run: |
+          aws ecs update-service \
+            --cluster "${{ secrets.ECS_CLUSTER }}" \
+            --service "${{ secrets.ECS_FRONTEND_SERVICE }}" \
+            --force-new-deployment
+          aws ecs wait services-stable \
+            --cluster "${{ secrets.ECS_CLUSTER }}" \
+            --services "${{ secrets.ECS_FRONTEND_SERVICE }}"
